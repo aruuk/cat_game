@@ -1,17 +1,16 @@
 import random
 from pgzero.builtins import Actor, sounds
 
-class Fish:
+class FakeFish:
     def __init__(self, maze, occupied_cells):
-        self.frames = ['fish1']
+        self.frames = ['fish2']
         self.frame_index = 0
-
         self.actor = Actor(self.frames[self.frame_index])
-
         self.reset(maze, occupied_cells)
         self.anim_timer = 0
 
     def reset(self, maze, occupied_cells):
+        # Ищем свободные клетки
         free_cells = [
             (col, row)
             for row in range(maze.rows)
@@ -20,7 +19,7 @@ class Fish:
         ]
 
         if not free_cells:
-            raise Exception("Нет свободных клеток для рыбы!")
+            raise Exception("Нет свободных клеток для фальшивой рыбы!")
 
         self.cell = random.choice(free_cells)
         occupied_cells.add(self.cell)
@@ -36,8 +35,8 @@ class Fish:
 
         if not self.collected and self.actor.colliderect(player.actor):
             self.collected = True
-            player.score += 1
-            sounds.collect.play()
+            player.score -= 1
+            sounds.ffish.play()
 
     def draw(self):
         if not self.collected:
